@@ -1,0 +1,177 @@
+/* General Layout and Styling */
+.content-container {
+    max-width: calc(100% - 40px);
+    height: 100%;
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content-container h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.content-container ul {
+    list-style: none;
+    padding: 0;
+}
+
+.content-container li {
+    background-color: #f5f5f5;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content-container h3 {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.content-container p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+.dark-back {
+    /* From https://css.glass */
+    background: rgba(0, 0, 0, 0.19);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4.9px);
+    -webkit-backdrop-filter: blur(4.9px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.main-container {
+    height: auto;
+}
+
+.content-container img {
+    max-width: 200px;
+    height: auto;
+    border-radius: 4px;
+    margin: 15px 0;
+    object-fit: cover;
+}
+
+.image-box {
+    display: inline-flex;
+    margin-right: 20px;
+}
+
+.content-box {
+    width: 100%;
+    word-break: break-word;
+    flex: 1 1 auto;
+    padding-left: 20px;
+    border-left: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+/* Styling for Action Buttons */
+.action-buttons {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    /* Allow buttons to wrap on smaller screens */
+}
+
+.action-buttons a,
+.action-buttons button {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+/* Button General Styling */
+.content-container .btn {
+    padding: 0;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: none;
+}
+
+.content-container .btn:hover:not(.btn-icon-only) {
+    box-shadow: none;
+    transform: translateY(0px);
+}
+
+.btn-edit:hover {
+    color: rgb(251, 99, 64);
+    box-shadow: none;
+}
+
+.btn-delete:hover {
+    color: rgb(245, 54, 92);
+    box-shadow: none;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .content-container {
+        padding: 15px;
+    }
+
+    .content-container h2 {
+        font-size: 1.75rem;
+    }
+
+    .content-container h3 {
+        font-size: 1.25rem;
+    }
+
+    .content-container p {
+        font-size: 0.95rem;
+    }
+
+    .action-buttons a,
+    .action-buttons button {
+        padding: 6px 18px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .content-container h2 {
+        font-size: 1.5rem;
+    }
+
+    .content-container h3 {
+        font-size: 1.1rem;
+    }
+
+    .content-container p {
+        font-size: 0.85rem;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        /* Stack buttons on small screens */
+        align-items: flex-start;
+        /* Align buttons to start */
+    }
+
+    .action-buttons a,
+    .action-buttons button {
+        width: 100%;
+        /* Full width buttons on small screens */
+        text-align: center;
+        /* Center text */
+    }
+}
