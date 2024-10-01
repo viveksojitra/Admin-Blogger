@@ -20,7 +20,7 @@ const defaultController = async (req, res) => {
   }
 };
 
-// AUTH CONTROLLERS/
+// AUTH CONTROLLERS -----------------------------------------------------------------------------------------------------------------------------------------------------
 // Register controller
 const registerController = (req, res) => {
   return res.render('sign-up');
@@ -103,8 +103,17 @@ const logoutController = (req, res) => {
   });
 };
 
+// Change Password
+const changePasswordController = (req, res) => {
+  res.render('change-password');
+}
 
-// USER CONTROLLERS
+// Forget Password
+const forgetPasswordController = (req, res) => {
+  res.render('forget-password');
+}
+
+// USER CONTROLLERS -----------------------------------------------------------------------------------------------------------------------------------------------------
 // Dashboard
 const dashboardController = async (req, res) => {
   try {
@@ -135,5 +144,7 @@ module.exports = {
   loginPostController,
   logoutController,
   dashboardController,
-  profileController
+  profileController,
+  changePasswordController,
+  forgetPasswordController
 };

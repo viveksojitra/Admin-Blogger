@@ -1,0 +1,11 @@
+{
+    "editor.find.autoFindInSelection": "never",
+    "editor.acceptSuggestionOnCommitCharacter": true,
+    "editor.inlineSuggest.enabled": true,
+    "editor.inlineSuggest.suppressSuggestions": false,
+    "editor.quickSuggestions": {
+        "comments": "on"
+    },
+    "editor.quickSuggestionsDelay": 5,
+    "intelephense.completion.fullyQualifyGlobalConstantsAndFunctions": true
+}
