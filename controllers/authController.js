@@ -82,13 +82,24 @@ const loginPostController = async (req, res) => {
   const userId = req.user._id.toString();
   res.cookie('userId', userId);
 
+  // if user not found
+  if (!req.user) {
+    console.log('User not found:', req.user);
+    return res.redirect('/signup');
+  }
+
+  // if password not matched
+  if (!await bcrypt.compare(req.body.password, req.user.password)) {
+    console.log('Password did not match');
+    return res.redirect('/signin');
+  }
+
   // Set Cookie
   await cookieController.setCookie(req, res, userId);
 
   console.log('User logged in successfully:', req.user);
   res.redirect('/');
 };
-
 
 // Logout controller
 const logoutController = (req, res) => {
@@ -105,13 +116,55 @@ const logoutController = (req, res) => {
 
 // Change Password
 const changePasswordController = (req, res) => {
-  res.render('change-password');
+  return res.render('change-password');
 }
+
+const changePasswordPostController = async (req, res) => {
+  const { oldPassword, newPassword, confirmPassword } = req.body;
+
+  if (!oldPassword || !newPassword || !confirmPassword) {
+    console.log('Missing fields during password change');
+    return res.redirect('/change-password');
+  }
+
+  if (newPassword !== confirmPassword) {
+    console.log('Passwords do not match');
+    return res.redirect('/change-password');
+  }
+
+  // Check if user exists
+  const existingUser = req.user;
+  if (!existingUser) {
+    console.log('User not found');
+    return res.redirect('/signup');
+  }
+
+  try {
+    const isMatch = await bcrypt.compare(oldPassword, existingUser.password);
+    if (!isMatch) {
+      console.log('Incorrect old password');
+      return res.redirect('/change-password');
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    existingUser.password = hashedPassword;
+
+    await existingUser.save();
+
+    console.log('Password changed successfully', existingUser);
+    res.redirect('/dashboard');
+  } catch (err) {
+    console.log('Error during password change:', err);
+    res.redirect('/change-password');
+  }
+};
 
 // Forget Password
 const forgetPasswordController = (req, res) => {
   res.render('forget-password');
 }
+
+// Forget Password Post Controller 
 
 // USER CONTROLLERS -----------------------------------------------------------------------------------------------------------------------------------------------------
 // Dashboard
@@ -146,5 +199,6 @@ module.exports = {
   dashboardController,
   profileController,
   changePasswordController,
+  changePasswordPostController,
   forgetPasswordController
 };

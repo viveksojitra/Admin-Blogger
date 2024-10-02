@@ -17,7 +17,7 @@ router.get('/signin', authControllers.loginController);
 router.post('/signinPost', passport.authenticate('local', { failureRedirect: '/signin' }), authControllers.loginPostController);
 router.get('/logout', authControllers.logoutController);
 router.get('/change-password', isAuthenticated, authControllers.changePasswordController);
-// router.post('/change-password-post', isAuthenticated, authControllers.changePasswordPostController);
+router.post('/change-password-post', isAuthenticated, authControllers.changePasswordPostController);
 router.get('/forget-password', authControllers.forgetPasswordController);
 // router.post('/forget-password-post', authControllers.forgetPasswordPostController);
 
