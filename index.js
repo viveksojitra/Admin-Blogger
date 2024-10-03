@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 app.use(require('express-session')({
     secret: 'godmod',
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
         secure: false,
     }

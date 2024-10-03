@@ -2,6 +2,10 @@ const User = require('../model/userModel');
 const cookieController = require('./cookieController');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const otpGenerator = require('otp-generator');
+
+let OTP = null;
+let existingUserId = null;
 
 // DEFAULT CONTROLLER
 const defaultController = async (req, res) => {
@@ -159,12 +163,88 @@ const changePasswordPostController = async (req, res) => {
   }
 };
 
-// Forget Password
-const forgetPasswordController = (req, res) => {
-  res.render('forget-password');
-}
+// Forget Password Controllers
+const forgetPasswordValidateController = (req, res) => res.render('forget-password-validate');
 
-// Forget Password Post Controller 
+const forgetPasswordValidatePostController = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    console.log('Email is required');
+    return res.redirect('/forget-password-validate');
+  }
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+      console.log('User not found');
+      return res.redirect('/signup');
+    }
+
+    // Generate and send OTP (implementation for sending the OTP via email is needed)
+    OTP = otpGenerator.generate(4, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
+    existingUserId = existingUser._id;
+    console.log('OTP generated:', OTP);
+
+    res.redirect('/otp-validate');
+  } catch (err) {
+    console.log('Error finding user:', err);
+    return res.redirect('/forget-password-validate');
+  }
+};
+
+// OTP Validate
+const otpValidateController = (req, res) => res.render('otp-validate');
+
+const otpValidatePostController = (req, res) => {
+  const { otp } = req.body;
+
+  if (!otp) {
+    console.log('OTP is required');
+    return res.redirect('/otp-validate');
+  }
+
+  if (otp !== OTP) {
+    console.log('Invalid OTP');
+    return res.redirect('/otp-validate');
+  }
+
+  console.log('OTP validated successfully');
+  res.redirect('/forget-password');
+};
+
+// Forget Password
+const forgetPasswordController = (req, res) => res.render('forget-password');
+
+const forgetPasswordPostController = async (req, res) => {
+  const { password, confirmPassword } = req.body;
+
+  if (!password || !confirmPassword) {
+    console.log('Missing fields during password change');
+    return res.redirect('/forget-password');
+  }
+
+  if (password !== confirmPassword) {
+    console.log('Passwords do not match');
+    return res.redirect('/forget-password');
+  }
+
+  try {
+    const existingUser = await User.findById(existingUserId);
+    if (!existingUser) {
+      console.log('User not found');
+      return res.redirect('/signin');
+    }
+
+    existingUser.password = await bcrypt.hash(password, saltRounds);
+    await existingUser.save();
+    console.log('Password changed successfully', existingUser);
+    res.redirect('/signin');
+  } catch (err) {
+    console.log('Error during password change:', err);
+    return res.redirect('/forget-password');
+  }
+};
 
 // USER CONTROLLERS -----------------------------------------------------------------------------------------------------------------------------------------------------
 // Dashboard
@@ -200,5 +280,10 @@ module.exports = {
   profileController,
   changePasswordController,
   changePasswordPostController,
-  forgetPasswordController
+  forgetPasswordValidateController,
+  forgetPasswordValidatePostController,
+  otpValidateController,
+  otpValidatePostController,
+  forgetPasswordController,
+  forgetPasswordPostController
 };

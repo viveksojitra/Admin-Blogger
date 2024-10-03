@@ -6,6 +6,7 @@ const authControllers = require('../controllers/authController');
 const blogController = require('../controllers/blogController');
 const passport = require('../config/passport.js');
 const isAuthenticated = require('../config/isAuth');
+const otpGenerator = require('otp-generator');
 
 // Default route
 router.get('/', authControllers.defaultController);
@@ -18,8 +19,18 @@ router.post('/signinPost', passport.authenticate('local', { failureRedirect: '/s
 router.get('/logout', authControllers.logoutController);
 router.get('/change-password', isAuthenticated, authControllers.changePasswordController);
 router.post('/change-password-post', isAuthenticated, authControllers.changePasswordPostController);
+
+// Forget Password Validate
+router.get('/forget-password-validate', authControllers.forgetPasswordValidateController);
+router.post('/forget-password-post-validate', authControllers.forgetPasswordValidatePostController);
+
+// OTP Validate
+router.get('/otp-validate', authControllers.otpValidateController);
+router.post('/otp-post-validate', authControllers.otpValidatePostController);
+
+// Forget Password
 router.get('/forget-password', authControllers.forgetPasswordController);
-// router.post('/forget-password-post', authControllers.forgetPasswordPostController);
+router.post('/forget-password-post', authControllers.forgetPasswordPostController);
 
 // Cookie routes
 router.get('/setcookie', cookieController.setCookie);
