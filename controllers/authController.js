@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 // const otpGenerator = require('otp-generator');
 
+const transporter = require('../config/nodeMailer');
+
 // let OTP = null; // Not Used
 let linkGen = null; // Instead of OTP
 
@@ -189,7 +191,24 @@ const forgetPasswordValidatePostController = async (req, res) => {
 
     console.log('Reset Link: ', resetLink);
 
-    return res.redirect('/forget-password-validate');
+    let mailOptions = {
+      from: 'viveksojitra1110@gmail.com',
+      to: existingUser.email,
+      subject: 'Password Reset Link',
+      text: `Please! Nevigate to this link to reset your password:
+        <a href="${resetLink}">Reset Password</a>
+      `,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+        return res.redirect('/forget-password-validate');
+      }
+      console.log(`Message is sent on ${existingUser.email}`);
+    });
+
+    return res.redirect(`/forget-password-validate`);
   } catch (err) {
     console.log('Error finding user:', err);
     return res.redirect('/forget-password-validate');
@@ -252,13 +271,11 @@ const forgetPasswordPostController = async (req, res) => {
 
   try {
     const existingUser = await User.findById(userId);
-
     if (!existingUser) {
       console.log('User not found');
       return res.redirect('/signin');
     }
 
-    // Hash the new password
     existingUser.password = await bcrypt.hash(password, saltRounds);
     await existingUser.save();
 
