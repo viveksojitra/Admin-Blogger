@@ -24,13 +24,18 @@ router.post('/change-password-post', isAuthenticated, authControllers.changePass
 router.get('/forget-password-validate', authControllers.forgetPasswordValidateController);
 router.post('/forget-password-post-validate', authControllers.forgetPasswordValidatePostController);
 
-// OTP Validate
-router.get('/otp-validate', authControllers.otpValidateController);
-router.post('/otp-post-validate', authControllers.otpValidatePostController);
+// OTP Validate [ Not Used ]
+// router.get('/otp-validate', authControllers.otpValidateController);
+// router.post('/otp-post-validate', authControllers.otpValidatePostController);
 
 // Forget Password
-router.get('/forget-password', authControllers.forgetPasswordController);
-router.post('/forget-password-post', authControllers.forgetPasswordPostController);
+// router.get('/forget-password', authControllers.forgetPasswordController); [ Not Used ]
+// router.post('/forget-password-post', authControllers.forgetPasswordPostController); [ Not Used ]
+router.get('/forget-password/:id', authControllers.forgetPasswordController); // [ Link Route ]
+router.post('/forget-password-post/:id', authControllers.forgetPasswordPostController); // [ Link Route ]
+
+// Page404
+router.get('/page404', authControllers.page404Controller);
 
 // Cookie routes
 router.get('/setcookie', cookieController.setCookie);
