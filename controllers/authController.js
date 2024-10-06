@@ -3,11 +3,10 @@ const cookieController = require('./cookieController');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 // const otpGenerator = require('otp-generator');
-
 const transporter = require('../config/nodeMailer');
+const randomstring = require("randomstring");
 
 // let OTP = null; // Not Used
-let linkGen = null; // Instead of OTP
 
 // DEFAULT CONTROLLER
 const defaultController = async (req, res) => {
@@ -185,6 +184,11 @@ const forgetPasswordValidatePostController = async (req, res) => {
 
     const resetLink = `http://localhost:3002/forget-password/${existingUser._id}`; // Instead of OTP
 
+    const token = randomstring.generate(10);
+    existingUser.token = token;
+    await existingUser.save();
+    console.log('User token:', existingUser.token);
+
     // Generate and send OTP [ Not Used ]
     // OTP = otpGenerator.generate(4, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
     // console.log('OTP generated:', OTP);
@@ -242,6 +246,14 @@ const forgetPasswordController = async (req, res) => {
   try {
     const existingUser = await User.findById(userId);
 
+    //Check if token is valid and not null
+    if (!existingUser.token) {
+      console.log('Token is not valid or expired');
+      return res.redirect('/page404');
+    }
+    console.log('Token Validated:', existingUser.token);
+
+
     if (!existingUser) {
       console.log('User not found');
       return res.redirect('/page404');
@@ -275,6 +287,10 @@ const forgetPasswordPostController = async (req, res) => {
       console.log('User not found');
       return res.redirect('/signin');
     }
+
+    // Now set token to null
+    existingUser.token = null;
+    console.log('Token Expired:', existingUser.token);
 
     existingUser.password = await bcrypt.hash(password, saltRounds);
     await existingUser.save();

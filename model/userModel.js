@@ -14,8 +14,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    token: {
+        type: String,
+        default: null,
+    },
 
-    // If you want to keep username (optional), don't make it unique
+    // Username 
     // username: {
     //   type: String,
     //   unique: false,
