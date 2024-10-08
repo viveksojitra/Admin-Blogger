@@ -541,6 +541,19 @@
     });
   </script>
 
+  <!-- Flash Message Toast -->
+  <script>
+    const flashToast = document.getElementById('flash-message');
+    if (flashToast) {
+      const bsToast = new bootstrap.Toast(flashToast);
+      bsToast.show();
+
+      setTimeout(function() {
+        bsToast.hide();
+      }, 2000);
+    }
+  </script>
+
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->

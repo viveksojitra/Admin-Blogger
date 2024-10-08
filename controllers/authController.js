@@ -38,11 +38,13 @@ const registerPostController = async (req, res) => {
 
   if (!name || !email || !password || !confirmPassword) {
     console.log('Missing fields during registration');
+    req.flash('error', 'Missing fields during registration');
     return res.redirect('/signup');
   }
 
   if (password !== confirmPassword) {
     console.log('Passwords do not match');
+    req.flash('error', 'Passwords do not match');
     return res.redirect('/signup');
   }
 
@@ -50,6 +52,7 @@ const registerPostController = async (req, res) => {
   const existingUser = await User.findOne({ email });
   if (existingUser) {
     console.log('User already exists with email:', email);
+    req.flash('error', 'User already exists with email');
     return res.redirect('/signup');
   }
 
@@ -66,6 +69,7 @@ const registerPostController = async (req, res) => {
     await newUser.save();
 
     console.log('User created successfully:', newUser);
+    req.flash('success', 'User created successfully');
 
     res.cookie('userId', newUser._id.toString());
 
@@ -87,15 +91,17 @@ const loginPostController = async (req, res) => {
   const userId = req.user._id.toString();
   res.cookie('userId', userId);
 
-  // if user not found
-  if (!req.user) {
+  // Check if email exist in database
+  if (!req.user.email) {
     console.log('User not found:', req.user);
+    req.flash('error', 'User not found');
     return res.redirect('/signup');
   }
 
   // if password not matched
   if (!await bcrypt.compare(req.body.password, req.user.password)) {
     console.log('Password did not match');
+    req.flash('error', 'Password did not match');
     return res.redirect('/signin');
   }
 
@@ -103,6 +109,8 @@ const loginPostController = async (req, res) => {
   await cookieController.setCookie(req, res, userId);
 
   console.log('User logged in successfully:', req.user);
+
+  req.flash('success', 'User logged in successfully');
   res.redirect('/');
 };
 
@@ -115,6 +123,7 @@ const logoutController = (req, res) => {
     }
     res.clearCookie('userId');
     console.log('User has been logged out!');
+    req.flash('success', 'User has been logged out!');
     res.redirect('/signin');
   });
 };
@@ -129,11 +138,13 @@ const changePasswordPostController = async (req, res) => {
 
   if (!oldPassword || !newPassword || !confirmPassword) {
     console.log('Missing fields during password change');
+    req.flash('error', 'Missing fields during password change');
     return res.redirect('/change-password');
   }
 
   if (newPassword !== confirmPassword) {
     console.log('Passwords do not match');
+    req.flash('error', 'Passwords do not match');
     return res.redirect('/change-password');
   }
 
@@ -141,6 +152,7 @@ const changePasswordPostController = async (req, res) => {
   const existingUser = req.user;
   if (!existingUser) {
     console.log('User not found');
+    req.flash('error', 'User not found');
     return res.redirect('/signup');
   }
 
@@ -148,6 +160,7 @@ const changePasswordPostController = async (req, res) => {
     const isMatch = await bcrypt.compare(oldPassword, existingUser.password);
     if (!isMatch) {
       console.log('Incorrect old password');
+      req.flash('error', 'Incorrect old password');
       return res.redirect('/change-password');
     }
 
@@ -157,9 +170,12 @@ const changePasswordPostController = async (req, res) => {
     await existingUser.save();
 
     console.log('Password changed successfully', existingUser);
+
+    req.flash('success', 'Password changed successfully');
     res.redirect('/dashboard');
   } catch (err) {
     console.log('Error during password change:', err);
+    req.flash('error', 'Error during password change');
     res.redirect('/change-password');
   }
 };
@@ -172,6 +188,7 @@ const forgetPasswordValidatePostController = async (req, res) => {
 
   if (!email) {
     console.log('Email is required');
+    req.flash('error', 'Email is required');
     return res.redirect('/forget-password-validate');
   }
 
@@ -179,6 +196,7 @@ const forgetPasswordValidatePostController = async (req, res) => {
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
       console.log('User not found');
+      req.flash('error', 'User not found');
       return res.redirect('/signup');
     }
 
@@ -206,15 +224,20 @@ const forgetPasswordValidatePostController = async (req, res) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.log(error);
+
+        console.log("Please check your email", error);
+        req.flash('error', 'Please check your email');
         return res.redirect('/forget-password-validate');
       }
       console.log(`Message is sent on ${existingUser.email}`);
+      req.flash('success', 'Please check your email');
+
     });
 
     return res.redirect(`/forget-password-validate`);
   } catch (err) {
     console.log('Error finding user:', err);
+    req.flash('error', 'User not exists');
     return res.redirect('/forget-password-validate');
   }
 };
@@ -249,6 +272,7 @@ const forgetPasswordController = async (req, res) => {
     //Check if token is valid and not null
     if (!existingUser.token) {
       console.log('Token is not valid or expired');
+      req.flash('error', 'Link is not valid or expired');
       return res.redirect('/page404');
     }
     console.log('Token Validated:', existingUser.token);
@@ -256,12 +280,14 @@ const forgetPasswordController = async (req, res) => {
 
     if (!existingUser) {
       console.log('User not found');
+      req.flash('error', 'User not found');
       return res.redirect('/page404');
     }
 
     return res.render('forget-password', { userId });
   } catch (err) {
     console.log('Error finding user:');
+    req.flash('error', 'User not found');
     return res.redirect('/page404');
   }
 };
@@ -273,11 +299,13 @@ const forgetPasswordPostController = async (req, res) => {
 
   if (!password || !confirmPassword) {
     console.log('Missing fields during password change');
+    req.flash('error', 'Missing fields during password change');
     return res.redirect(`/forget-password/${userId}`);
   }
 
   if (password !== confirmPassword) {
     console.log('Passwords do not match');
+    req.flash('error', 'Passwords do not match');
     return res.redirect(`/forget-password/${userId}`);
   }
 
@@ -285,6 +313,7 @@ const forgetPasswordPostController = async (req, res) => {
     const existingUser = await User.findById(userId);
     if (!existingUser) {
       console.log('User not found');
+      req.flash('error', 'User not found');
       return res.redirect('/signin');
     }
 
@@ -296,15 +325,18 @@ const forgetPasswordPostController = async (req, res) => {
     await existingUser.save();
 
     console.log('Password changed successfully', existingUser);
+    req.flash('success', 'Password changed successfully');
     res.redirect('/signin');
   } catch (err) {
     console.log('Error during password change:', err);
+    req.flash('error', 'Error during password change');
     return res.redirect(`/forget-password/${userId}`);
   }
 };
 
 // Page404 Controller
 const page404Controller = (req, res) => {
+  req.flash('error', 'Page not found');
   res.render('page404');
 }
 

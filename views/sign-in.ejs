@@ -34,9 +34,27 @@
   <!-- CSS Files -->
   <link href="../assets/css/password.css" rel="stylesheet" />
   <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
+  <link href="../assets/css/password.css" rel="stylesheet" />
+
 </head>
 
 <body class="">
+
+  <!-- Flash Message -->
+  <div id="flashMessage" class="toast-alert position-relative w-100">
+    <% if (success != '') { %>
+    <div id="flash-message" class="flash-message alert alert-success alert-dismissible fade show position-absolute start-50 p-2 px-3 text-white mt-4" role="alert">
+      <%= success %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% } else if (error != '') { %>
+    <div id="flash-message" class="flash-message alert alert-danger alert-dismissible fade show position-absolute w-100 start-50 p-2 px-3 text-white mt-4" role="alert">
+      <%= error %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% } %>
+  </div>
+
   <!-- Navbar -->
   <div class="container position-sticky z-index-sticky top-0">
     <div class="row">
@@ -157,6 +175,20 @@
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
   </script>
+
+  <!-- Flash Message Toast -->
+  <script>
+    const flashToast = document.getElementById('flash-message');
+    if (flashToast) {
+      const bsToast = new bootstrap.Toast(flashToast);
+      bsToast.show();
+
+      setTimeout(function() {
+        bsToast.hide();
+      }, 2000);
+    }
+  </script>
+
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->

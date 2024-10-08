@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const session = require('express-session');
 
 const path = require('path');
 const router = require('./routes/index');
@@ -12,6 +13,8 @@ const cookieParser = require('cookie-parser');
 
 const passport = require('./config/passport')
 
+const connectFlash = require('connect-flash');
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, "/views"));
 
@@ -22,7 +25,8 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(require('express-session')({
+// express-session
+app.use(session({
     secret: 'godmod',
     resave: false,
     saveUninitialized: true,
@@ -30,6 +34,16 @@ app.use(require('express-session')({
         secure: false,
     }
 }));
+
+// connect-flash
+app.use(connectFlash());
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+});
+
 
 app.use(passport.initialize());
 app.use(passport.session());

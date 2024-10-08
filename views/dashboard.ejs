@@ -36,6 +36,22 @@
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
+
+  <!-- Flash Message -->
+  <div id="flashMessage" class="toast-alert position-relative w-100">
+    <% if (success != '') { %>
+    <div id="flash-message" class="flash-message alert alert-success alert-dismissible fade show position-absolute start-50 p-2 px-3 text-white mt-4" role="alert">
+      <%= success %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% } else if (error != '') { %>
+    <div id="flash-message" class="flash-message alert alert-danger alert-dismissible fade show position-absolute w-100 start-50 p-2 px-3 text-white mt-4" role="alert">
+      <%= error %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% } %>
+  </div>
+
   <div class="min-height-300 bg-primary position-absolute w-100"></div>
   <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
     <div class="sidenav-header">
@@ -779,6 +795,20 @@
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
   </script>
+
+  <!-- Flash Message Toast -->
+  <script>
+    const flashToast = document.getElementById('flash-message');
+    if (flashToast) {
+      const bsToast = new bootstrap.Toast(flashToast);
+      bsToast.show();
+
+      setTimeout(function() {
+        bsToast.hide();
+      }, 2000);
+    }
+  </script>
+
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
