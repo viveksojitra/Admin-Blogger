@@ -130,6 +130,7 @@ const deleteBlog = async (req, res) => {
     }
 };
 
+// ----- TOPIC -----
 // Topic Controller
 const topicController = async (req, res) => {
     try {
@@ -201,6 +202,13 @@ const deleteTopicController = async (req, res) => {
     }
 };
 
+// ----- SUBTOPIC -----
+// Subtopic Controller
+const subtopicController = async (req, res) => {
+    res.render('subtopic');
+}
+
+
 module.exports = {
     viewAllBlogs,
     viewMyBlogs,
@@ -211,5 +219,6 @@ module.exports = {
     deleteBlog,
     topicController,
     topicPostController,
-    deleteTopicController
+    deleteTopicController,
+    subtopicController
 };

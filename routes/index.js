@@ -8,10 +8,10 @@ const passport = require('../config/passport.js');
 const isAuthenticated = require('../config/isAuth');
 const otpGenerator = require('otp-generator');
 
-// Default route
+// Default Route
 router.get('/', authControllers.defaultController);
 
-// Auth routes
+// Auth Routes
 router.get('/signup', authControllers.registerController);
 router.post('/signupPost', authControllers.registerPostController);
 router.get('/signin', authControllers.loginController);
@@ -37,12 +37,12 @@ router.post('/forget-password-post/:id', authControllers.forgetPasswordPostContr
 // Page404
 router.get('/page404', authControllers.page404Controller);
 
-// Cookie routes
+// Cookie Routes
 router.get('/setcookie', cookieController.setCookie);
 router.get('/getcookie', cookieController.getCookie);
 router.get('/clearcookie', cookieController.clearCookie);
 
-// User Pages routes
+// User Pages Routes
 router.get('/dashboard', isAuthenticated, authControllers.dashboardController);
 router.get('/profile', isAuthenticated, authControllers.profileController);
 
@@ -51,6 +51,10 @@ router.get('/topic', isAuthenticated, blogController.topicController);
 router.post('/topic-post', isAuthenticated, blogController.topicPostController);
 router.get('/delete-topic/:id', isAuthenticated, blogController.deleteTopicController);
 
+// Blog Subtopic Routes
+router.get('/subtopic', isAuthenticated, blogController.subtopicController);
+// router.post('/subtopic-post', isAuthenticated, blogController.subtopicPostController);
+// router.get('/delete-subtopictopic/:id', isAuthenticated, blogController.deleteSubtopicController);
 
 // Blog Routes
 router.get('/explore', isAuthenticated, blogController.viewAllBlogs);
