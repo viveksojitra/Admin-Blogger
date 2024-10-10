@@ -47,14 +47,14 @@ router.get('/dashboard', isAuthenticated, authControllers.dashboardController);
 router.get('/profile', isAuthenticated, authControllers.profileController);
 
 // Blog Topic Routes
-router.get('/topic', isAuthenticated, blogController.topicController);
-router.post('/topic-post', isAuthenticated, blogController.topicPostController);
-router.get('/delete-topic/:id', isAuthenticated, blogController.deleteTopicController);
+router.get('/add-topic', isAuthenticated, blogController.addTopicController);
+router.post('/add-topic-post', isAuthenticated, blogController.addTopicPostController);
+router.get('/delete-add-topic/:id', isAuthenticated, blogController.deleteaddTopicController);
 
 // Blog Subtopic Routes
-router.get('/subtopic', isAuthenticated, blogController.subtopicController);
-// router.post('/subtopic-post', isAuthenticated, blogController.subtopicPostController);
-// router.get('/delete-subtopictopic/:id', isAuthenticated, blogController.deleteSubtopicController);
+router.get('/add-subtopic', isAuthenticated, blogController.addSubtopicController);
+router.post('/add-subtopic-post', isAuthenticated, blogController.addSubtopicPostController);
+// router.get('/delete-add-subtopictopic/:id', isAuthenticated, blogController.deleteSubtopicController);
 
 // Blog Routes
 router.get('/explore', isAuthenticated, blogController.viewAllBlogs);

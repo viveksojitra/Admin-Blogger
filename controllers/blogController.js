@@ -2,6 +2,7 @@ const Blog = require('../model/blogModel');
 const fs = require('fs').promises;
 const path = require('path');
 const Topic = require('../model/topicModel');
+const Subtopic = require('../model/subtopicModel');
 
 // View All blogs
 const viewAllBlogs = async (req, res) => {
@@ -132,19 +133,21 @@ const deleteBlog = async (req, res) => {
 
 // ----- TOPIC -----
 // Topic Controller
-const topicController = async (req, res) => {
-    try {
-        const topics = await Topic.find().populate('user');
-        res.render('topic', { topics, currentUser: req.user });
-    } catch (error) {
-        console.error('Error fetching topics:', error);
-        req.flash('error', 'Something went wrong while fetching topics.');
-        res.redirect('/');
-    }
+const addTopicController = async (req, res) => {
+    // try {
+    //     const topics = await Topic.find().populate('user');
+    //     res.render('topic', { topics, currentUser: req.user });
+    // } catch (error) {
+    //     console.error('Error fetching topics:', error);
+    //     req.flash('error', 'Something went wrong while fetching topics.');
+    //     res.redirect('/');
+    // }
+
+    res.render('add-topic', { currentUser: req.user });
 };
 
 // Topic Post Controller
-const topicPostController = async (req, res) => {
+const addTopicPostController = async (req, res) => {
     try {
         const { topic } = req.body;
 
@@ -155,23 +158,23 @@ const topicPostController = async (req, res) => {
 
         const newTopic = new Topic({
             topic,
-            user: req.user._id // Assign the logged-in user's ID to the topic
+            user: req.user._id
         });
 
         await newTopic.save();
 
         req.flash('success', 'Topic added successfully!');
-        res.redirect('/topic');
+        res.redirect('/add-topic');
 
     } catch (err) {
         console.error('Error saving topic:', err);
         req.flash('error', 'Something went wrong, please try again.');
-        res.redirect('/topic');
+        res.redirect('/add-topic');
     }
 };
 
 // Delete Topic Controller
-const deleteTopicController = async (req, res) => {
+const deleteaddTopicController = async (req, res) => {
     try {
         const topicId = req.params.id;
         const userId = req.user._id; // Get the ID of the currently logged-in user
@@ -204,10 +207,73 @@ const deleteTopicController = async (req, res) => {
 
 // ----- SUBTOPIC -----
 // Subtopic Controller
-const subtopicController = async (req, res) => {
-    res.render('subtopic');
+const addSubtopicController = async (req, res) => {
+
+    try {
+        // only user's topics
+        // const topics = await Topic.find().populate('user');
+        // res.render('topic', { topics, currentUser: req.user });
+
+        // all topics
+        const topics = await Topic.find({});
+        res.render('add-subtopic', { topics });
+
+    } catch (error) {
+        console.error('Error fetching topics:', error);
+        req.flash('error', 'Something went wrong while fetching topics.');
+        res.redirect('/');
+    }
 }
 
+// Subtopic Post Controller
+const addSubtopicPostController = async (req, res) => {
+    try {
+        const { topic, subtopic } = req.body;
+
+        // Validate the subtopic
+        if (!subtopic || subtopic.trim() === "") {
+            req.flash('error', 'Subtopic cannot be empty.');
+            return res.redirect('/add-subtopic');
+        }
+
+        // Find topic by ID
+        const selectedTopic = await Topic.findById(topic);
+        if (!selectedTopic) {
+            req.flash('error', 'Invalid Topic.');
+            return res.redirect('/add-subtopic');
+        }
+
+        // Created new subtopic
+        const newSubtopic = new Subtopic({
+            subtopic,
+            topic: selectedTopic._id,
+            user: req.user._id
+        });
+
+        await newSubtopic.save();
+
+        req.flash('success', 'Subtopic added successfully!');
+        res.redirect('/add-subtopic');
+
+    } catch (err) {
+        console.error('Error saving subtopic:', err);
+        req.flash('error', 'Something went wrong, please try again.');
+        res.redirect('/add-subtopic');
+    }
+};
+
+// Get Subtopic Controller
+// const getSubtopics = async (req, res) => {
+//     try {
+//         // Fetch subtopics and populate the associated topic data
+//         const subtopics = await Subtopic.find().populate('topic', 'topic'); // Populate the 'topic' field with the 'topic' name
+
+//         res.render('subtopics', { subtopics });
+//     } catch (err) {
+//         console.error('Error fetching subtopics:', err);
+//         res.status(500).send('Server Error');
+//     }
+// };
 
 module.exports = {
     viewAllBlogs,
@@ -217,8 +283,9 @@ module.exports = {
     editBlogForm,
     updateBlog,
     deleteBlog,
-    topicController,
-    topicPostController,
-    deleteTopicController,
-    subtopicController
+    addTopicController,
+    addTopicPostController,
+    deleteaddTopicController,
+    addSubtopicController,
+    addSubtopicPostController
 };
