@@ -38,14 +38,14 @@
 <body class="g-sidenav-show   bg-gray-100">
 
   <!-- Flash Message -->
-  <div id="flashMessage" class="toast-alert position-relative w-100">
+  <div id="flashMessage" class="toast-alert position-absolute w-100">
     <% if (success != '') { %>
-    <div id="flash-message" class="flash-message alert alert-success alert-dismissible fade show position-absolute start-50 p-2 px-3 text-white mt-4" role="alert">
+    <div id="flash-message" class="flash-message alert alert-success alert-dismissible fade show position-absolute p-2 px-3 text-white mt-4 w-100 text-center border-0" role="alert">
       <%= success %>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <% } else if (error != '') { %>
-    <div id="flash-message" class="flash-message alert alert-danger alert-dismissible fade show position-absolute w-100 start-50 p-2 px-3 text-white mt-4" role="alert">
+    <div id="flash-message" class="flash-message alert alert-danger alert-dismissible fade show position-absolute p-2 px-3 text-white mt-4 w-100 text-center border-0" role="alert">
       <%= error %>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
@@ -82,6 +82,7 @@
             <span class="nav-link-text ms-1">Explore</span>
           </a>
         </li>
+
         <!-- My Blogs -->
         <li class="nav-item">
           <a class="nav-link" href="/my-blogs">
@@ -91,6 +92,7 @@
             <span class="nav-link-text ms-1">My Blogs</span>
           </a>
         </li>
+
         <!-- Create Blog -->
         <li class="nav-item">
           <a class="nav-link" href="/create-blog">
@@ -98,6 +100,16 @@
               <i class="ni ni-fat-add text-success text-lg opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Create Blog</span>
+          </a>
+        </li>
+
+        <!-- Topic -->
+        <li class="nav-item">
+          <a class="nav-link" href="/topic">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="ni ni-tag text-danger text-sm opacity-10"></i>
+            </div>
+            <span class="nav-link-text ms-1">Topic</span>
           </a>
         </li>
 

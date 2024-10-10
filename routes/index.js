@@ -42,9 +42,15 @@ router.get('/setcookie', cookieController.setCookie);
 router.get('/getcookie', cookieController.getCookie);
 router.get('/clearcookie', cookieController.clearCookie);
 
-// User routes
+// User Pages routes
 router.get('/dashboard', isAuthenticated, authControllers.dashboardController);
 router.get('/profile', isAuthenticated, authControllers.profileController);
+
+// Blog Topic Routes
+router.get('/topic', isAuthenticated, blogController.topicController);
+router.post('/topic-post', isAuthenticated, blogController.topicPostController);
+router.get('/delete-topic/:id', isAuthenticated, blogController.deleteTopicController);
+
 
 // Blog Routes
 router.get('/explore', isAuthenticated, blogController.viewAllBlogs);

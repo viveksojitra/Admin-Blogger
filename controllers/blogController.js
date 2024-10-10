@@ -1,6 +1,7 @@
 const Blog = require('../model/blogModel');
 const fs = require('fs').promises;
 const path = require('path');
+const Topic = require('../model/topicModel');
 
 // View All blogs
 const viewAllBlogs = async (req, res) => {
@@ -129,6 +130,76 @@ const deleteBlog = async (req, res) => {
     }
 };
 
+// Topic Controller
+const topicController = async (req, res) => {
+    try {
+        const topics = await Topic.find().populate('user');
+        res.render('topic', { topics, currentUser: req.user });
+    } catch (error) {
+        console.error('Error fetching topics:', error);
+        req.flash('error', 'Something went wrong while fetching topics.');
+        res.redirect('/');
+    }
+};
+
+// Topic Post Controller
+const topicPostController = async (req, res) => {
+    try {
+        const { topic } = req.body;
+
+        if (!topic || topic.trim() === "") {
+            req.flash('error', 'Topic cannot be empty.');
+            return res.redirect('/topic');
+        }
+
+        const newTopic = new Topic({
+            topic,
+            user: req.user._id // Assign the logged-in user's ID to the topic
+        });
+
+        await newTopic.save();
+
+        req.flash('success', 'Topic added successfully!');
+        res.redirect('/topic');
+
+    } catch (err) {
+        console.error('Error saving topic:', err);
+        req.flash('error', 'Something went wrong, please try again.');
+        res.redirect('/topic');
+    }
+};
+
+// Delete Topic Controller
+const deleteTopicController = async (req, res) => {
+    try {
+        const topicId = req.params.id;
+        const userId = req.user._id; // Get the ID of the currently logged-in user
+
+        // Find the topic by ID
+        const topic = await Topic.findById(topicId);
+
+        // Check if topic exists
+        if (!topic) {
+            req.flash('error', 'Topic not found');
+            return res.redirect('/topic');
+        }
+
+        // Check if the logged-in user is the creator of the topic
+        if (topic.user.toString() !== userId.toString()) {
+            req.flash('error', 'You are not authorized to delete this topic');
+            return res.redirect('/topic');
+        }
+
+        // Delete the topic if authorized
+        await Topic.findByIdAndDelete(topicId);
+        req.flash('success', 'Topic deleted successfully');
+        res.redirect('/topic');
+    } catch (error) {
+        console.error('Error deleting topic:', error);
+        req.flash('error', 'Error deleting topic');
+        res.redirect('/topic');
+    }
+};
 
 module.exports = {
     viewAllBlogs,
@@ -137,5 +208,8 @@ module.exports = {
     addBlog,
     editBlogForm,
     updateBlog,
-    deleteBlog
+    deleteBlog,
+    topicController,
+    topicPostController,
+    deleteTopicController
 };

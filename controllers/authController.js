@@ -363,6 +363,11 @@ const profileController = (req, res) => {
   res.render('profile');
 }
 
+// Topic Page
+const topicController = (req, res) => {
+  res.render('topic');
+}
+
 module.exports = {
   defaultController,
   registerController,
@@ -380,5 +385,6 @@ module.exports = {
   // otpValidatePostController, [ Not Used ]
   forgetPasswordController,
   forgetPasswordPostController,
-  page404Controller
+  page404Controller,
+  topicController,
 };

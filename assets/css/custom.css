@@ -1,7 +1,15 @@
 /* Toast Alert */
 .toast-alert {
     height: auto;
+    transform: translateX(-50%);
     z-index: 9999;
+}
+
+.flash-message {
+    transform: translateX(-50%);
+    left: 50%;
+    z-index: 9999;
+
 }
 
 /* FP - Forgot Password */
@@ -70,3 +78,5 @@
 .page404-link a:hover {
     color: rgb(252, 71, 106);
 }
+
+/* Topic Page */
