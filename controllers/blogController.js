@@ -8,7 +8,7 @@ const Subtopic = require('../model/subtopicModel');
 const viewAllBlogs = async (req, res) => {
     try {
         const blogs = await Blog.find({}).populate('author');
-        res.render('explore', { blogs: blogs || [], currentUser: req.user }); // Pass the current user to the view
+        res.render('explore', { blogs: blogs || [], currentUser: req.user });
     } catch (err) {
         console.error('Error fetching blogs:', err);
         res.render('explore', { blogs: [], currentUser: req.user });
@@ -18,7 +18,7 @@ const viewAllBlogs = async (req, res) => {
 // View logged-in user's blogs
 const viewMyBlogs = async (req, res) => {
     try {
-        const blogs = await Blog.find({ author: req.user._id }).populate('author'); // Ensure you populate the author
+        const blogs = await Blog.find({ author: req.user._id }).populate('author');
         console.log("author", req.user._id);
         res.render('my-blogs', { blogs: blogs || [] });
     } catch (err) {
@@ -143,7 +143,7 @@ const viewTopicsSubtopicsController = async (req, res) => {
         let subtopics = [];
 
         if (selectedTopicId) {
-            subtopics = await Subtopic.find({ topic: selectedTopicId }).populate('user');
+            subtopics = await Subtopic.find({ topic: selectedTopicId });
         }
 
         res.render('view-topics', { topics, subtopics, currentUser: req.user });
@@ -152,7 +152,6 @@ const viewTopicsSubtopicsController = async (req, res) => {
         res.redirect('/dashboard');
     }
 };
-
 
 // Add Topic Controller
 const addTopicController = async (req, res) => {
