@@ -1,3 +1,4 @@
+// model/subtopicModel.js
 const mongoose = require('mongoose');
 
 const subtopicSchema = new mongoose.Schema({
@@ -8,6 +9,11 @@ const subtopicSchema = new mongoose.Schema({
     topic: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Topic',
+        required: true
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     createdAt: {

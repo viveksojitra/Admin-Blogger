@@ -132,7 +132,29 @@ const deleteBlog = async (req, res) => {
 };
 
 // ----- TOPIC -----
-// Topic Controller
+// View Topics and Subtopics Controller
+const viewTopicsSubtopicsController = async (req, res) => {
+    try {
+        // Fetch all Topics
+        const topics = await Topic.find({}).populate('user');
+
+        //  Fetch all Subtopics
+        const selectedTopicId = req.query.topicId;
+        let subtopics = [];
+
+        if (selectedTopicId) {
+            subtopics = await Subtopic.find({ topic: selectedTopicId }).populate('user');
+        }
+
+        res.render('view-topics', { topics, subtopics, currentUser: req.user });
+    } catch (err) {
+        console.error('Error fetching topics or subtopics:', err);
+        res.redirect('/dashboard');
+    }
+};
+
+
+// Add Topic Controller
 const addTopicController = async (req, res) => {
     // try {
     //     const topics = await Topic.find().populate('user');
@@ -146,7 +168,7 @@ const addTopicController = async (req, res) => {
     res.render('add-topic', { currentUser: req.user });
 };
 
-// Topic Post Controller
+// Add Topic Post Controller
 const addTopicPostController = async (req, res) => {
     try {
         const { topic } = req.body;
@@ -197,16 +219,16 @@ const deleteaddTopicController = async (req, res) => {
         // Delete the topic if authorized
         await Topic.findByIdAndDelete(topicId);
         req.flash('success', 'Topic deleted successfully');
-        res.redirect('/topic');
+        res.redirect('/view-topics');
     } catch (error) {
         console.error('Error deleting topic:', error);
         req.flash('error', 'Error deleting topic');
-        res.redirect('/topic');
+        res.redirect('/view-topics');
     }
 };
 
 // ----- SUBTOPIC -----
-// Subtopic Controller
+// Add Subtopic Controller
 const addSubtopicController = async (req, res) => {
 
     try {
@@ -225,7 +247,7 @@ const addSubtopicController = async (req, res) => {
     }
 }
 
-// Subtopic Post Controller
+// Add Subtopic Post Controller
 const addSubtopicPostController = async (req, res) => {
     try {
         const { topic, subtopic } = req.body;
@@ -262,6 +284,37 @@ const addSubtopicPostController = async (req, res) => {
     }
 };
 
+// Delete Subtopic Controller
+const deleteSubtopicController = async (req, res) => {
+    try {
+        const subtopicId = req.params.id;
+        const userId = req.user._id;  // Get logged-in user ID
+
+        // Find the subtopic by ID
+        const subtopic = await Subtopic.findById(subtopicId);
+
+        if (!subtopic) {
+            req.flash('error', 'Subtopic not found');
+            return res.redirect('/view-topics');
+        }
+
+        // Ensure the logged-in user is the creator of the subtopic
+        if (subtopic.user.toString() !== userId.toString()) {
+            req.flash('error', 'You are not authorized to delete this subtopic');
+            return res.redirect('/view-topics');
+        }
+
+        // Delete the subtopic
+        await Subtopic.findByIdAndDelete(subtopicId);
+        req.flash('success', 'Subtopic deleted successfully');
+        res.redirect('/view-topics');
+    } catch (err) {
+        console.error('Error deleting subtopic:', err);
+        req.flash('error', 'Error deleting subtopic');
+        res.redirect('/view-topics');
+    }
+};
+
 // Get Subtopic Controller
 // const getSubtopics = async (req, res) => {
 //     try {
@@ -287,5 +340,7 @@ module.exports = {
     addTopicPostController,
     deleteaddTopicController,
     addSubtopicController,
-    addSubtopicPostController
+    addSubtopicPostController,
+    viewTopicsSubtopicsController,
+    deleteSubtopicController,
 };

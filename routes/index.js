@@ -46,6 +46,10 @@ router.get('/clearcookie', cookieController.clearCookie);
 router.get('/dashboard', isAuthenticated, authControllers.dashboardController);
 router.get('/profile', isAuthenticated, authControllers.profileController);
 
+// View Topics
+router.get('/view-topics', isAuthenticated, blogController.viewTopicsSubtopicsController);
+
+
 // Blog Topic Routes
 router.get('/add-topic', isAuthenticated, blogController.addTopicController);
 router.post('/add-topic-post', isAuthenticated, blogController.addTopicPostController);
@@ -54,7 +58,7 @@ router.get('/delete-add-topic/:id', isAuthenticated, blogController.deleteaddTop
 // Blog Subtopic Routes
 router.get('/add-subtopic', isAuthenticated, blogController.addSubtopicController);
 router.post('/add-subtopic-post', isAuthenticated, blogController.addSubtopicPostController);
-// router.get('/delete-add-subtopictopic/:id', isAuthenticated, blogController.deleteSubtopicController);
+router.get('/delete-add-subtopictopic/:id', isAuthenticated, blogController.deleteSubtopicController);
 
 // Blog Routes
 router.get('/explore', isAuthenticated, blogController.viewAllBlogs);
