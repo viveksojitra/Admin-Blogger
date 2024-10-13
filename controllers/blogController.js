@@ -136,15 +136,12 @@ const deleteBlog = async (req, res) => {
 const viewTopicsSubtopicsController = async (req, res) => {
     try {
         // Fetch all Topics
-        const topics = await Topic.find({}).populate('user');
+        const topics = await Topic.find({}).populate('user').lean();
+        console.log("topics", topics);
 
-        //  Fetch all Subtopics
-        const selectedTopicId = req.query.topicId;
-        let subtopics = [];
-
-        if (selectedTopicId) {
-            subtopics = await Subtopic.find({ topic: selectedTopicId });
-        }
+        // Fetch all Subtopics
+        const subtopics = await Subtopic.find({}).lean();
+        console.log("subtopics", subtopics);
 
         res.render('view-topics', { topics, subtopics, currentUser: req.user });
     } catch (err) {
@@ -152,6 +149,7 @@ const viewTopicsSubtopicsController = async (req, res) => {
         res.redirect('/dashboard');
     }
 };
+
 
 // Add Topic Controller
 const addTopicController = async (req, res) => {
@@ -198,33 +196,38 @@ const addTopicPostController = async (req, res) => {
 const deleteaddTopicController = async (req, res) => {
     try {
         const topicId = req.params.id;
-        const userId = req.user._id; // Get the ID of the currently logged-in user
+        const userId = req.user._id;
 
         // Find the topic by ID
         const topic = await Topic.findById(topicId);
 
-        // Check if topic exists
+        // Check if the topic exists
         if (!topic) {
             req.flash('error', 'Topic not found');
-            return res.redirect('/topic');
+            return res.redirect('/view-topics');
         }
 
         // Check if the logged-in user is the creator of the topic
         if (topic.user.toString() !== userId.toString()) {
             req.flash('error', 'You are not authorized to delete this topic');
-            return res.redirect('/topic');
+            return res.redirect('/view-topics');
         }
 
-        // Delete the topic if authorized
+        // Delete all associated subtopics before deleting the topic
+        await Subtopic.deleteMany({ topic: topicId });
+
+        // Delete the topic
         await Topic.findByIdAndDelete(topicId);
-        req.flash('success', 'Topic deleted successfully');
+
+        req.flash('success', 'Topic and associated subtopics deleted successfully');
         res.redirect('/view-topics');
     } catch (error) {
         console.error('Error deleting topic:', error);
-        req.flash('error', 'Error deleting topic');
+        req.flash('error', 'Error deleting topic and associated subtopics');
         res.redirect('/view-topics');
     }
 };
+
 
 // ----- SUBTOPIC -----
 // Add Subtopic Controller

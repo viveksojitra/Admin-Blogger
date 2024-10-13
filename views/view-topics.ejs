@@ -167,16 +167,16 @@
     </nav>
     <!-- End Navbar -->
 
-    <!-- Get Topics and Subtopics -->
+    <!-- Topics and Subtopics Display -->
     <div class="container mt-5 vh-100">
       <div class="card mx-auto p-3">
         <div class="card-body d-flex flex-wrap topic-container">
           <!-- Loop through all topics -->
           <% topics.forEach(topic => { %>
-          <div class="topic-card-container" data-topic-id="<%= topic._id %>">
+          <div class="topic-card-container d-flex cursor-pointer" data-topic-id="<%= topic._id %>">
             <!-- Topic Card -->
-            <div class="topic-card d-flex justify-content-center m-1 bg-dark text-white py-1 px-2 rounded">
-              <p class="card-text m-0 p-1 small fw-bold text-center w-100">
+            <div class="topic-card d-flex justify-content-center m-1 bg-dark text-white py-1 px-3 rounded">
+              <p class="card-text m-0 p-1 small fw-bold text-center w-100 me-2">
                 <%= topic.topic %>
               </p>
               <% if (topic.user && topic.user._id.toString() === currentUser._id.toString()) { %>
@@ -187,15 +187,24 @@
             </div>
 
             <!-- Subtopics section (initially hidden) -->
-            <div class="subtopics-container mt-2 d-none">
+            <div class="subtopics-container d-none">
               <% subtopics.forEach(subtopic => { %>
-              <% if(subtopic.topic._id.toString() === topic._id.toString()) { %>
-              <div class="subtopic-card d-flex justify-content-center m-1 bg-light text-dark py-1 px-2 rounded">
-                <p class="card-text m-0 p-1 small fw-bold text-center w-100">
+              <% if (subtopic.topic.toString() === topic._id.toString()) { %>
+              <!-- Ensure matching topic/subtopic IDs -->
+              <div class="subtopic-card d-flex justify-content-center m-1 bg-light text-dark py-1 px-3 rounded">
+                <p class="card-text m-0 p-1 small fw-bold text-center w-100 me-2">
                   <%= subtopic.subtopic %>
                 </p>
+
+                <!-- Show delete button if the logged-in user created the subtopic -->
+                <% if (subtopic.user && subtopic.user.toString() === currentUser._id.toString()) { %>
+                <a href="/delete-add-subtopic/<%= subtopic._id %>" class="delete-icon d-flex align-items-center p-1">
+                  <i class="fa fa-close text-dark"></i>
+                </a>
+                <% } %>
               </div>
-              <% }}); %>
+              <% } %>
+              <% }); %>
             </div>
           </div>
           <% }); %>
@@ -205,38 +214,8 @@
     <!-- End Get Topics and Subtopics -->
 
     <!-- Footer -->
-    <footer class="footer pt-3  ">
-      <div class="container-fluid">
-        <div class="row align-items-center justify-content-lg-between">
-          <div class="col-lg-6 mb-lg-0 mb-4">
-            <div class="copyright text-center text-sm text-muted text-lg-start">
-              © <script>
-                document.write(new Date().getFullYear())
-              </script>,
-              made with <i class="fa fa-heart"></i> by
-              <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a>
-              for a better web.
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-              <li class="nav-item">
-                <a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">Creative Tim</a>
-              </li>
-              <li class="nav-item">
-                <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">About Us</a>
-              </li>
-              <li class="nav-item">
-                <a href="https://www.creative-tim.com/blog" class="nav-link text-muted" target="_blank">Blog</a>
-              </li>
-              <li class="nav-item">
-                <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted" target="_blank">License</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <%- include('partials/footer.ejs') %>
+
   </div>
   </div>
 
@@ -287,42 +266,50 @@
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       const topicCards = document.querySelectorAll(".topic-card-container");
-      const topicContainer = document.querySelector(".topic-container");
 
       topicCards.forEach(card => {
         const topicCard = card.querySelector(".topic-card");
+        const subtopicsContainer = card.querySelector(".subtopics-container");
 
         topicCard.addEventListener("click", function() {
-          // Clear the previously visible subtopics
-          document.querySelectorAll(".subtopics-container").forEach(container => {
-            container.classList.add("d-none");
+          // Check if the clicked subtopics are currently hidden
+          const isHidden = subtopicsContainer.classList.contains("d-none");
+
+          // Hide all subtopics and remove flex from their parent containers
+          topicCards.forEach(otherCard => {
+            const otherSubtopicsContainer = otherCard.querySelector(".subtopics-container");
+            if (otherCard !== card) {
+              // Hide other subtopics
+              otherSubtopicsContainer.classList.add("d-none");
+              // Remove flex class from the topic card container
+              otherCard.classList.remove("d-flex");
+            } else {
+              // If this is the clicked card and we are showing subtopics
+              if (isHidden) {
+                // Add flex class to the clicked topic card container
+                card.classList.add("d-flex");
+              } else {
+                // Remove flex class if we are hiding subtopics
+                card.classList.remove("d-flex");
+              }
+            }
           });
 
-          // Move other topics to the end of the container
-          const clickedTopic = card;
-          const subtopicsContainer = card.querySelector(".subtopics-container");
-
-          // Check if the subtopics are already visible
-          if (subtopicsContainer.classList.contains("d-none")) {
-            // Remove clicked topic and append it at the beginning with its subtopics
-            topicContainer.prepend(clickedTopic);
-
-            // Make subtopics visible
+          // Toggle visibility of the clicked topic's subtopics
+          if (isHidden) {
+            // Make the clicked topic's subtopics visible
             subtopicsContainer.classList.remove("d-none");
-
-            // Move other topic cards to the end of the container except the clicked one
-            topicCards.forEach(otherCard => {
-              if (otherCard !== clickedTopic) {
-                topicContainer.append(otherCard);
-              }
-            });
+            subtopicsContainer.classList.add("d-flex");
           } else {
+            // Hide the clicked topic's subtopics if already visible
             subtopicsContainer.classList.add("d-none");
           }
         });
       });
     });
   </script>
+
+  <%- include('partials/helpers/active.ejs') %>
 
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>

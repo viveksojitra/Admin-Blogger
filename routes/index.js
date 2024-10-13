@@ -58,7 +58,7 @@ router.get('/delete-add-topic/:id', isAuthenticated, blogController.deleteaddTop
 // Blog Subtopic Routes
 router.get('/add-subtopic', isAuthenticated, blogController.addSubtopicController);
 router.post('/add-subtopic-post', isAuthenticated, blogController.addSubtopicPostController);
-router.get('/delete-add-subtopictopic/:id', isAuthenticated, blogController.deleteSubtopicController);
+router.get('/delete-add-subtopic/:id', isAuthenticated, blogController.deleteSubtopicController);
 
 // Blog Routes
 router.get('/explore', isAuthenticated, blogController.viewAllBlogs);
