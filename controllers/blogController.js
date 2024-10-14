@@ -3,11 +3,12 @@ const fs = require('fs').promises;
 const path = require('path');
 const Topic = require('../model/topicModel');
 const Subtopic = require('../model/subtopicModel');
+const Comment = require('../model/commentModel');
 
 // View All blogs
 const viewAllBlogs = async (req, res) => {
     try {
-        const blogs = await Blog.find({}).populate('author');
+        const blogs = await Blog.find({}).populate('author').populate('comment');
         res.render('explore', { blogs: blogs || [], currentUser: req.user });
     } catch (err) {
         console.error('Error fetching blogs:', err);

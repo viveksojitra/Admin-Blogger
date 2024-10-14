@@ -12,6 +12,11 @@ const BlogSchema = new mongoose.Schema({
   image: {
     type: String,
   },
+  comment: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Comment',
+    required: true,
+  },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
