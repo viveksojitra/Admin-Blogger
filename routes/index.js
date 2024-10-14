@@ -60,6 +60,10 @@ router.get('/add-subtopic', isAuthenticated, blogController.addSubtopicControlle
 router.post('/add-subtopic-post', isAuthenticated, blogController.addSubtopicPostController);
 router.get('/delete-add-subtopic/:id', isAuthenticated, blogController.deleteSubtopicController);
 
+// Add Comments Routes
+router.post('/add-comments/:id', isAuthenticated, blogController.addCommentsController);
+
+
 // Blog Routes
 router.get('/explore', isAuthenticated, blogController.viewAllBlogs);
 router.get('/my-blogs', isAuthenticated, blogController.viewMyBlogs);

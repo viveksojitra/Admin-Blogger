@@ -331,6 +331,42 @@ const deleteSubtopicController = async (req, res) => {
 //     }
 // };
 
+// COMMENTS
+// Add Comment Controller
+const addCommentsController = async (req, res) => {
+
+    console.log('Add Comment Controller');
+
+    try {
+
+        // console.log("Blog", blog);
+
+        // if (!comment || comment.trim() === "") {
+        //     req.flash('error', 'Comment cannot be empty.');
+        //     return res.redirect('/explore');
+        // }
+
+        const newComment = new Comment({
+            comment: req.body.comment,
+            blog: req.params.id,
+            user: req.user._id
+        });
+
+        console.log("Comment", newComment);
+
+        await newComment.save();
+
+        req.flash('success', 'Comment added successfully!');
+        res.redirect('/explore');
+
+    } catch (err) {
+        console.error('Error saving topic:', err);
+        req.flash('error', 'Something went wrong, please try again.');
+        res.redirect('/explore');
+    }
+};
+
+
 module.exports = {
     viewAllBlogs,
     viewMyBlogs,
@@ -346,4 +382,5 @@ module.exports = {
     addSubtopicPostController,
     viewTopicsSubtopicsController,
     deleteSubtopicController,
+    addCommentsController
 };
