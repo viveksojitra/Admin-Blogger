@@ -8,8 +8,18 @@ const Comment = require('../model/commentModel');
 // View All blogs
 const viewAllBlogs = async (req, res) => {
     try {
-        const blogs = await Blog.find({}).populate('author').populate('comment');
-        res.render('explore', { blogs: blogs || [], currentUser: req.user });
+        // Fetch blogs and populate user and comments
+        const blogs = await Blog.find()
+            .populate('author', 'name')
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'user',
+                    select: 'name',
+                },
+            });
+
+        res.render('explore', { blogs: blogs || [], currentUser: req.user, message: blogs.length ? '' : 'No blogs available.' });
     } catch (err) {
         console.error('Error fetching blogs:', err);
         res.render('explore', { blogs: [], currentUser: req.user });
@@ -334,38 +344,26 @@ const deleteSubtopicController = async (req, res) => {
 // COMMENTS
 // Add Comment Controller
 const addCommentsController = async (req, res) => {
-
-    console.log('Add Comment Controller');
-
     try {
-
-        // console.log("Blog", blog);
-
-        // if (!comment || comment.trim() === "") {
-        //     req.flash('error', 'Comment cannot be empty.');
-        //     return res.redirect('/explore');
-        // }
-
         const newComment = new Comment({
             comment: req.body.comment,
             blog: req.params.id,
             user: req.user._id
         });
-
-        console.log("Comment", newComment);
-
         await newComment.save();
+
+        const blog = await Blog.findById(req.params.id);
+        blog.comments.push(newComment._id);
+        await blog.save();
 
         req.flash('success', 'Comment added successfully!');
         res.redirect('/explore');
-
     } catch (err) {
-        console.error('Error saving topic:', err);
+        console.error('Error saving comment:', err);
         req.flash('error', 'Something went wrong, please try again.');
         res.redirect('/explore');
     }
 };
-
 
 module.exports = {
     viewAllBlogs,

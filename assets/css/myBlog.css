@@ -107,6 +107,17 @@
     box-shadow: none;
 }
 
+/* Comment Button */
+.content-container .btn-comment {
+    color: #333;
+    background-color: #fff;
+}
+
+.content-container .btn-comment:hover {
+    color: #fff;
+    background-color: #333;
+}
+
 .content-container .btn:hover:not(.btn-icon-only) {
     box-shadow: none;
     transform: translateY(0px);
@@ -121,6 +132,17 @@
     color: rgb(245, 54, 92);
     box-shadow: none;
 }
+
+.btn-comment-toggle:hover {
+    color: rgb(17, 205, 239);
+    box-shadow: none;
+}
+
+.btn-warning:not(:disabled):not(.disabled):active {
+    background-color: transparent;
+}
+
+/* Smooth Transition on Comment Area */
 
 /* Responsive Styles */
 @media (max-width: 768px) {
