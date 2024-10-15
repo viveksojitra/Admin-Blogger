@@ -328,19 +328,6 @@ const deleteSubtopicController = async (req, res) => {
     }
 };
 
-// Get Subtopic Controller
-// const getSubtopics = async (req, res) => {
-//     try {
-//         // Fetch subtopics and populate the associated topic data
-//         const subtopics = await Subtopic.find().populate('topic', 'topic'); // Populate the 'topic' field with the 'topic' name
-
-//         res.render('subtopics', { subtopics });
-//     } catch (err) {
-//         console.error('Error fetching subtopics:', err);
-//         res.status(500).send('Server Error');
-//     }
-// };
-
 // COMMENTS
 // Add Comment Controller
 const addCommentsController = async (req, res) => {

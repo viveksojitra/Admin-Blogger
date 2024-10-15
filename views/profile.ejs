@@ -240,25 +240,25 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Username</label>
-                    <input class="form-control" type="text" value="vivek@deadeye">
+                    <input class="form-control" type="text" value="vivek@deadeye - static">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Email address</label>
-                    <input class="form-control" type="email" value="viveksojitra@outlook.in">
+                    <input class="form-control" type="email" value="<%= email %>">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">First name</label>
-                    <input class="form-control" type="text" value="Vivek">
+                    <input class="form-control text-capitalize" type="text" value="<%= username %>">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Last name</label>
-                    <input class="form-control" type="text" value="Sojitra">
+                    <input class="form-control text-capitalize" type="text" value="">
                   </div>
                 </div>
               </div>
@@ -274,13 +274,13 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">City</label>
-                    <input class="form-control" type="text" value="New York">
+                    <input class="form-control text-capitalize" type="text" value="New York">
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Country</label>
-                    <input class="form-control" type="text" value="United States">
+                    <input class="form-control text-capitalize" type="text" value="United States">
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -296,7 +296,7 @@
                 <div class="col-md-12">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">About me</label>
-                    <input class="form-control" type="text" value="A beautiful Dashboard for Bootstrap 5. It is Free and Open Source.">
+                    <input class="form-control" type="text" value="">
                   </div>
                 </div>
               </div>
@@ -343,8 +343,8 @@
                 </div>
               </div>
               <div class="text-center mt-4">
-                <h5>
-                  Vivek Sojitra<span class="font-weight-light">, 35</span>
+                <h5 class="text-capitalize">
+                  <%= username %><span class="font-weight-light">, 35</span>
                 </h5>
                 <div class="h6 font-weight-300">
                   <i class="ni location_pin mr-2"></i>Bucharest, Romania

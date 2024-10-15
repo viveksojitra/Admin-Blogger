@@ -359,8 +359,10 @@ const dashboardController = async (req, res) => {
 };
 
 // Profile
-const profileController = (req, res) => {
-  res.render('profile');
+const profileController = async (req, res) => {
+
+  const user = await User.findOne({ _id: req.cookies.userId }).select('name').select('email');
+  res.render('profile', { username: user.name, email: user.email });
 }
 
 // Topic Page
