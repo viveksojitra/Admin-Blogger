@@ -12,6 +12,10 @@
 
 }
 
+.toast-alert-position {
+    left: 50%;
+}
+
 /* FP - Forgot Password */
 .fp {
     transition: all 0.3s ease;

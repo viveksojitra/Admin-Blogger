@@ -1,14 +1,14 @@
 <!-- Flash Message -->
 <div id="flashMessage" class="toast-alert position-absolute w-100">
-    <% if (success != '') { %>
-    <div id="flash-message" class="flash-message alert alert-success alert-dismissible fade show position-absolute p-2 px-3 text-white w-100 text-center border-0" role="alert">
-      <%= success %>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <% } else if (error != '') { %>
-    <div id="flash-message" class="flash-message alert alert-danger alert-dismissible fade show position-absolute p-2 px-3 text-white mt-4 w-100 text-center border-0" role="alert">
-      <%= error %>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <% } %>
+  <% if (success != '') { %>
+  <div id="flash-message" class="flash-message alert alert-success alert-dismissible fade show position-absolute p-2 px-3 text-white w-50 text-center border-0" role="alert">
+    <%= success %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
+  <% } else if (error != '') { %>
+  <div id="flash-message" class="flash-message alert alert-danger alert-dismissible fade show position-absolute p-2 px-3 text-white mt-4 w-100 text-center border-0" role="alert">
+    <%= error %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <% } %>
+</div>
