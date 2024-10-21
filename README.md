@@ -64,6 +64,9 @@ https://github.com/user-attachments/assets/ae769c1f-2811-4077-94af-cd9b1b73b1c0
 ![Sub Topics]
 ![sub-topics](https://github.com/user-attachments/assets/d4a3511a-b226-469a-b2e0-460ba8fc727d)
 
+![View Topics/Sub-Topics]
+![view-topics-subtopics](https://github.com/user-attachments/assets/cb296293-ecb8-4aab-af0c-359963a7aa87)
+
 ![Profile Page]
 ![profile](https://github.com/user-attachments/assets/56642a3d-d2ff-453e-9fb4-8dfc75bedc45)
 
