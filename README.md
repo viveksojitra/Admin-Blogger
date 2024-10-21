@@ -91,8 +91,9 @@ https://github.com/user-attachments/assets/ae769c1f-2811-4077-94af-cd9b1b73b1c0
     git clone https://github.com/viveksojitra/Admin-Blogger.git
     ```
 2. Navigate to the project directory:
+   or rename it. [blogger-admin -> cd blogger-admin]
     ```bash
-    cd blogger-admin
+    cd Admin-Blogger-master
     ```
 3. Install dependencies:
     ```bash
