@@ -7,7 +7,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="./assets/img/favicon.png">
   <title>
-    Argon Dashboard 2 by Creative Tim
+    Blogger - Admin / Explore
   </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -168,7 +168,7 @@
               <% } %>
             </div>
             <div class="content-box d-block">
-              <div>
+              <div class="line-clamp">
                 <h3>
                   <%= blog.title %>
                 </h3>
@@ -252,11 +252,7 @@
         <% } %>
       </ul>
     </div>
-
     <!-- End Content -->
-
-    <!-- Footer -->
-    <%- include('partials/footer.ejs') %>
 
   </div>
   </div>
@@ -280,13 +276,44 @@
     function toggleCommentArea(blogId) {
       const commentArea = document.getElementById(`comments-${blogId}`);
       if (commentArea.style.display === "none" || commentArea.style.display === "") {
-        commentArea.style.display = "block"; // Show the comment area
+        commentArea.style.display = "block";
       } else {
-        commentArea.style.display = "none"; // Hide the comment area
+        commentArea.style.display = "none";
       }
     }
   </script>
 
+  <script>
+    // Function to toggle comment area visibility and control body scroll
+    function toggleCommentArea(blogId) {
+      const commentArea = document.getElementById(`comments-${blogId}`);
+      const isVisible = commentArea.style.display === 'block';
+
+      // Hide all comment sections
+      document.querySelectorAll('.comments-section').forEach(area => {
+        area.style.display = 'none';
+      });
+
+      // Enable body scroll by default
+      document.body.classList.remove('no-scroll');
+
+      // Show the clicked comment area if it was not visible
+      if (!isVisible) {
+        commentArea.style.display = 'block';
+        document.body.classList.add('no-scroll');
+      }
+    }
+
+    // Optionally, you can add a listener for clicks outside the comment area
+    document.addEventListener('click', function(event) {
+      if (!event.target.closest('.comments-section') && !event.target.closest('.btn-comment-toggle')) {
+        document.querySelectorAll('.comments-section').forEach(area => {
+          area.style.display = 'none';
+        });
+        document.body.classList.remove('no-scroll');
+      }
+    });
+  </script>
 
   <%- include('partials/helpers/active.ejs') %>
 

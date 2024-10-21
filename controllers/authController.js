@@ -181,7 +181,9 @@ const changePasswordPostController = async (req, res) => {
 };
 
 // Forget Password Controllers
-const forgetPasswordValidateController = (req, res) => res.render('forget-password-validate');
+const forgetPasswordValidateController = (req, res) => {
+  return res.render('forget-password-validate');
+}
 
 const forgetPasswordValidatePostController = async (req, res) => {
   const { email } = req.body;
