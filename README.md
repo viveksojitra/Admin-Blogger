@@ -35,9 +35,6 @@ https://github.com/user-attachments/assets/ae769c1f-2811-4077-94af-cd9b1b73b1c0
 ![signin](https://github.com/user-attachments/assets/fdc81ee1-5135-4838-a485-ec4d7099e4b3)
 
 ![Forget Password Validation]
-![forget-password-link](https://github.com/user-attachments/assets/9e378df5-f01b-4f56-81d8-d9fbb7f54235)
-
-![Forget Password Page]
 ![forget-password](https://github.com/user-attachments/assets/d9ded8cc-fe72-4331-911f-000f1ce9a937)
 
 ![Dashboard]
